@@ -1,0 +1,28 @@
+{
+    "name": "node-hiccup",
+    "version": "1.0.0",
+    "description": "JavaScript version of jHiccup for NodeJS",
+    "main": "./dist/index.js",
+    "typings": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+      "tsc": "tsc",
+      "prettier": "prettier --parser typescript -l src/**/*.ts",
+      "prettier:fix": "prettier --write --parser typescript -l src/**/*.ts"
+    },
+    "author": "Alexandre Victoor",
+    "license": "BSD",
+    "devDependencies": {
+      "@types/node": "7.0.0",
+      "prettier": "^1.6.1",
+      "typescript": "^3.1.0"
+    },
+    "dependencies": {
+      "base64-js": "^1.2.0",
+      "hdr-histogram-js": "^1.0.0",
+      "pako": "^1.0.3"
+    }
+  }
+  
