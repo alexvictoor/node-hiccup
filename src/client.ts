@@ -12,8 +12,8 @@ export class HiccupRecorder {
   
     constructor(
       private worker: ChildProcess,
-      public writer = (line: string) => console.log(line),
-      private resolutionMs = 100,
+      private tag = "HICCUP",
+      private resolutionMs = 50,
       private reportingIntervalMs = 60000
     ) {}
   
@@ -21,7 +21,8 @@ export class HiccupRecorder {
       const startEvent: StartHiccupRecorderEvent = {
         type: "start",
         resolutionMs: this.resolutionMs,
-        reportingIntervalMs: this.reportingIntervalMs
+        reportingIntervalMs: this.reportingIntervalMs,
+        tag: this.tag
       };
 
       this.worker.send(startEvent);

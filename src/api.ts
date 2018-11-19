@@ -2,6 +2,7 @@ export interface StartHiccupRecorderEvent {
   type: "start";
   resolutionMs: number;
   reportingIntervalMs: number;
+  tag: string;
 }
 
 export interface RecordHiccupEvent {

@@ -25,6 +25,7 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
   resolutionNanoSec = event.resolutionMs * 1000 * 1000;
   reporter = setInterval(() => {
     histogram = recorder.getIntervalHistogram(histogram);
+    histogram.tag = event.tag;
     writer.outputIntervalHistogram(histogram);
   }, event.reportingIntervalMs);
 };
