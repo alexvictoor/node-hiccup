@@ -1,10 +1,7 @@
 // Hello world HTTP
-const { fork } = require('child_process');
 const http = require('http');
-const hiccupWorker = fork('../dist/start-worker.js');
 
-const client = require('../dist/client');
-const recorder = new client.HiccupRecorder(hiccupWorker);
+const recorder = require('../dist').default;
 
 http.createServer((req, res) => {
   let buffer = "";
