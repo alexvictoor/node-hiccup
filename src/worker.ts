@@ -19,7 +19,8 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
   writer.outputLogFormatVersion();
   writer.outputComment("node-hiccup v1.0");
   writer.outputComment("Timestamp and interval length are in seconds");
-  writer.outputComment("Hiccup measures, including max, are in nano seconds");
+  writer.outputComment("Hiccup measures are in nano seconds");
+  writer.outputComment("Hiccup max are in micro seconds");
   writer.outputLegend();
   recorder.reset();
   resolutionNanoSec = event.resolutionMs * 1000 * 1000;
