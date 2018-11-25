@@ -12,9 +12,10 @@ export class HiccupRecorder {
   
     constructor(
       private worker: ChildProcess,
+      private controlIdleWorker: ChildProcess,
       private tag = "HICCUP",
       private resolutionMs = 50,
-      private reportingIntervalMs = 60000
+      private reportingIntervalMs = 60000,
     ) {}
   
     start() {
@@ -26,12 +27,13 @@ export class HiccupRecorder {
       };
 
       this.worker.send(startEvent);
+      this.controlIdleWorker.send(startEvent);
       let timeBeforeMeasurement = process.hrtime();
       this.recorderLoop = setInterval(() => {
         const delta = process.hrtime(timeBeforeMeasurement);
         const recordEvent: RecordHiccupEvent = {
           type: "record",
-          deltaTimeNanoSec: (delta[0] * 1e9 + delta[1])
+          deltaTimeMicroSec: Math.floor(delta[0] * 1e6 + delta[1] / 1e3)
         };
         this.worker.send(recordEvent);
         timeBeforeMeasurement = process.hrtime();
@@ -44,6 +46,7 @@ export class HiccupRecorder {
         type: "stop"
       };
       this.worker.send(stopEvent);
+      this.controlIdleWorker.send(stopEvent);
     }
   }
   

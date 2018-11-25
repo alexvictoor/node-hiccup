@@ -1,14 +1,14 @@
 import { Recorder, HistogramLogWriter } from "hdr-histogram-js";
 import {
   Event,
-  RecordHiccupEvent,
   StartHiccupRecorderEvent,
+  RecordHiccupEvent,
   StopHiccupRecorderEvent
 } from "./api";
 
 type Logger = (content: string) => void;
 
-let resolutionNanoSec: number;
+let resolutionMicroSec: number = 1; // value not used - makes TypeScript compiler happy
 let reporter: any;
 const recorder = new Recorder();
 let histogram = recorder.getIntervalHistogram();
@@ -19,11 +19,11 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
   writer.outputLogFormatVersion();
   writer.outputComment("node-hiccup v1.0");
   writer.outputComment("Timestamp and interval length are in seconds");
-  writer.outputComment("Hiccup measures are in nano seconds");
-  writer.outputComment("Hiccup max are in micro seconds");
+  writer.outputComment("Hiccup measures are in micro seconds");
+  writer.outputComment("Hiccup max are in milliseconds");
   writer.outputLegend();
   recorder.reset();
-  resolutionNanoSec = event.resolutionMs * 1000 * 1000;
+  resolutionMicroSec = event.resolutionMs * 1000;
   reporter = setInterval(() => {
     histogram = recorder.getIntervalHistogram(histogram);
     histogram.tag = event.tag;
@@ -31,17 +31,17 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
   }, event.reportingIntervalMs);
 };
 
-let shortestObservedDeltaTimeNanoSec = Number.MAX_SAFE_INTEGER;
-const handleRecord = ({ deltaTimeNanoSec }: RecordHiccupEvent) => {
-  if (deltaTimeNanoSec < shortestObservedDeltaTimeNanoSec) {
-    shortestObservedDeltaTimeNanoSec = deltaTimeNanoSec;
+let shortestObservedDeltaTimeMicroSec = Number.MAX_SAFE_INTEGER;
+const handleRecord = ({ deltaTimeMicroSec }: RecordHiccupEvent) => {
+  if (deltaTimeMicroSec < shortestObservedDeltaTimeMicroSec) {
+    shortestObservedDeltaTimeMicroSec = deltaTimeMicroSec;
   }
-  const hiccupTimeNanoSec = Math.round(
-    deltaTimeNanoSec - shortestObservedDeltaTimeNanoSec
+  const hiccupTimeMicroSec = Math.round(
+    deltaTimeMicroSec - shortestObservedDeltaTimeMicroSec
   );
   recorder.recordValueWithExpectedInterval(
-    hiccupTimeNanoSec,
-    resolutionNanoSec
+    hiccupTimeMicroSec,
+    resolutionMicroSec
   );
 };
 
