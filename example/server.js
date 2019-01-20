@@ -3,8 +3,8 @@ const { fork } = require('child_process');
 const http = require('http');
 const hiccupWorker = fork('../dist/start-worker.js');
 
-const client = require('../dist/client');
-const recorder = new client.HiccupRecorder(hiccupWorker);
+const monitor = require('../dist').default;
+
 
 http.createServer((req, res) => {
   let buffer = "";
@@ -15,5 +15,8 @@ http.createServer((req, res) => {
   res.end('Hello world! ' + new Date() + ' ' + buffer.length);
 }).listen(8080, () => {
   console.log('Server started on port 8080');
-  recorder.start();
+  monitor({
+    enableIdleController: false,
+    reportingIntervalMs: 5000,
+  });
 });
