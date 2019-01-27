@@ -5,10 +5,15 @@ const hiccupWorker = () => fork(`${__dirname}/start-worker.js`);
 const controlIdleWorker = () => fork(`${__dirname}/start-idle-controller.js`);
 
 interface BuildRecorderParams {
+    /** sampling resolution in milliseconds (default 100ms) */
     resolutionMs: number,
+    /** reporting interval (default 30000m) */
     reportingIntervalMs: number,
+    /** tag used in the logs for hiccup measures (default "HICCUP") */
     tag: string,
+    /**  enable an extra event loop to measure idle workload (default true)*/
     enableIdleController: true,
+    /** tag used in the logs for idle workload measures (default "CONTROL_IDLE") */
     idleTag: string,
 }
 
