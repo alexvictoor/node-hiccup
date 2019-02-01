@@ -11,7 +11,7 @@ export class HiccupRecorder {
 
   constructor(
     private worker: ChildProcess,
-    private controlIdleWorker: ChildProcess | null,
+    private controlIdleWorker: ChildProcess | false,
     private tag = "HICCUP",
     private idleTag = "CONTROL_IDLE",
     private resolutionMs = 100,

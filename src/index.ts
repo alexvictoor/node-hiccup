@@ -11,8 +11,8 @@ interface BuildRecorderParams {
     reportingIntervalMs: number,
     /** tag used in the logs for hiccup measures (default "HICCUP") */
     tag: string,
-    /**  enable an extra event loop to measure idle workload (default true)*/
-    enableIdleController: true,
+    /**  enable an extra event loop to measure idle workload (default false)*/
+    enableIdleController: boolean,
     /** tag used in the logs for idle workload measures (default "CONTROL_IDLE") */
     idleTag: string,
 }
@@ -21,7 +21,7 @@ const defaultBuildRecorderParams: BuildRecorderParams = {
     resolutionMs: 100,
     reportingIntervalMs: 30000,
     tag: "HICCUP",
-    enableIdleController: true,
+    enableIdleController: false,
     idleTag: "CONTROL_IDLE",
 }
 
@@ -40,7 +40,7 @@ const buildRecorder = (params: Partial<BuildRecorderParams>) => {
     );
 };
 
-const monitor = (params: Partial<BuildRecorderParams>) => {
+const monitor = (params: Partial<BuildRecorderParams> = defaultBuildRecorderParams) => {
     const recorder = buildRecorder(params);
     recorder.start();
     return recorder;
