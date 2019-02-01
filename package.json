@@ -4,6 +4,9 @@
   "description": "JavaScript version of jHiccup for NodeJS",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
+  "bin": {
+    "node-hiccup": "./dist/cli.js"
+  },
   "files": [
     "dist"
   ],
