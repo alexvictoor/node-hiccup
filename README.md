@@ -9,7 +9,16 @@ node-hiccup is strongly inspired by [jHiccup](https://github.com/giltene/jHiccup
 Just like jHiccup, node-hiccup runs a loop and keeps track of the delay between two turns. If the delay is bigger than usual, the system, the JavaScript runtime, might have freeze. All the delay are stored in an histogram which is serialized at fixed interval in a log, leveraging on [HdrHistogram](https://github.com/HdrHistogram/HdrHistogramJS). Since HdrHistogram operations might increase the load of your application, all the costly treatments are done by a forked NodeJS process. Hence the overhead on the event loop running your code should be as low as possible. 
 
 ## Usage
-First you need to include node-hiccup in your project:
+
+You can use node-hiccup without touching any line of code, leveraging on npx. You just need to change the command line used to bootstrap your node application:
+
+```
+  npx node-hiccup server.js  // assuming that server.js is the bootstrap script for your app
+
+```
+
+In some cases you may need to have more control on how your application is lauched. 
+If you are in this situation, you need to include node-hiccup in your project:
 ```
   npm i -S node-hiccup
 ```
