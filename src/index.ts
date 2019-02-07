@@ -11,7 +11,7 @@ interface BuildRecorderParams {
     reportingIntervalMs: number,
     /** tag used in the logs for hiccup measures (default "HICCUP") */
     tag: string,
-    /**  enable an extra event loop to measure idle workload (default false)*/
+    /**  enable a forked process to measure idle workload (default false)*/
     enableIdleController: boolean,
     /** tag used in the logs for idle workload measures (default "CONTROL_IDLE") */
     idleTag: string,

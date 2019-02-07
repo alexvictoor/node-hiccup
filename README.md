@@ -57,7 +57,7 @@ You can specify a bunch of optional parameter to customise the way node-hiccup m
     
     tag: "HICCUP",                // tag used in the logs for hiccup measures
     
-    idleController: false,        // when set to true enable an extra event loop 
+    idleController: false,        // when set to true enable a forked process 
                                   // to measure idle workload.
     
     idleTag: "CONTROL_IDLE",      // tag used in the logs for idle workload measures
