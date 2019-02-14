@@ -54,7 +54,7 @@ export class HiccupRecorder {
       const delta = process.hrtime(timeBeforeMeasurement);
       const recordEvent: RecordHiccupEvent = {
         type: "record",
-        deltaTimeMicroSec: Math.floor(delta[0] * 1e6 + delta[1] / 1e3)
+        deltaTimeMilliSec: Math.floor(delta[0] * 1e3 + delta[1] / 1e6)
       };
       this.worker.send(recordEvent);
       timeBeforeMeasurement = process.hrtime();

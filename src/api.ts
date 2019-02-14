@@ -7,7 +7,7 @@ export interface StartHiccupRecorderEvent {
 
 export interface RecordHiccupEvent {
   type: "record";
-  deltaTimeMicroSec: number;
+  deltaTimeMilliSec: number;
 }
 
 export interface StopHiccupRecorderEvent {
