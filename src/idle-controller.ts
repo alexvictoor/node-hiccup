@@ -1,6 +1,6 @@
 import { Recorder, HistogramLogWriter } from "hdr-histogram-js";
 import {
-  Event,
+  EventFromClient,
   StartHiccupRecorderEvent,
   StopHiccupRecorderEvent
 } from "./api";
@@ -54,7 +54,7 @@ const handleStop = (event: StopHiccupRecorderEvent) => {
 
 export function configureAndStartIdleController(customLogger: (content: string) => void = console.log) {
     logger = customLogger;
-    process.on('message', (event: Event) => {
+    process.on('message', (event: EventFromClient) => {
       switch (event.type) {
         case "start":
           handleStart(event);

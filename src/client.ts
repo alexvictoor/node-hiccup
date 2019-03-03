@@ -1,13 +1,16 @@
 import {
     RecordHiccupEvent,
     StartHiccupRecorderEvent,
-    StopHiccupRecorderEvent
+    StopHiccupRecorderEvent,
+    HiccupStatistics,
+    EventFromWorker
   } from "./api";
 import { ChildProcess } from "child_process";
   
   
-export class HiccupRecorder {
+export class HiccupClient {
   private recorderLoop: any;
+  private lastHiccupStatistics: HiccupStatistics;
 
   constructor(
     private worker: ChildProcess,
@@ -16,12 +19,25 @@ export class HiccupRecorder {
     private idleTag = "CONTROL_IDLE",
     private resolutionMs = 100,
     private reportingIntervalMs = 30000,
-  ) {}
+  ) {
+    this.lastHiccupStatistics = {
+      count: NaN,
+      mean: NaN,
+      p90: NaN,
+      p99: NaN,
+      p99_9: NaN,
+      max: NaN,
+    }
+  }
 
   start() {
     this.startWorker();
     this.startControlIdleWorker();
     this.startRecorderLoop();
+  }
+
+  getLastHiccupStatistics(): HiccupStatistics {
+    return this.lastHiccupStatistics;
   }
 
   private startWorker() {
@@ -59,6 +75,12 @@ export class HiccupRecorder {
       this.worker.send(recordEvent);
       timeBeforeMeasurement = process.hrtime();
     }, this.resolutionMs);
+
+    this.worker.on('message', (event: EventFromWorker) => {
+      if (event.type === "statistics") {
+          this.lastHiccupStatistics = event.statistics;
+      }
+    });
   }
   
   stop() {

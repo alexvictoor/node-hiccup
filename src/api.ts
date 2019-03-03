@@ -14,7 +14,23 @@ export interface StopHiccupRecorderEvent {
   type: "stop";
 }
 
-export type Event =
+export interface HiccupStatisticsEvent {
+  type: "statistics";
+  statistics: HiccupStatistics,
+}
+
+export interface HiccupStatistics {
+  count: number,
+  mean: number,
+  p90: number,
+  p99: number,
+  p99_9: number,
+  max: number,
+}
+
+export type EventFromClient =
   | StartHiccupRecorderEvent
   | RecordHiccupEvent
   | StopHiccupRecorderEvent;
+
+export type EventFromWorker = HiccupStatisticsEvent;

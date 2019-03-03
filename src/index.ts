@@ -1,10 +1,10 @@
 import { fork } from 'child_process';
-import { HiccupRecorder } from './client';
+import { HiccupClient } from './client';
 
 const hiccupWorker = () => fork(`${__dirname}/start-worker.js`);
 const controlIdleWorker = () => fork(`${__dirname}/start-idle-controller.js`);
 
-interface BuildRecorderParams {
+interface BuildClientParams {
     /** sampling resolution in milliseconds (default 100ms) */
     resolutionMs: number,
     /** reporting interval (default 30000m) */
@@ -17,7 +17,7 @@ interface BuildRecorderParams {
     idleTag: string,
 }
 
-const defaultBuildRecorderParams: BuildRecorderParams = {
+const defaultBuildClientParams: BuildClientParams = {
     resolutionMs: 100,
     reportingIntervalMs: 30000,
     tag: "HICCUP",
@@ -25,12 +25,12 @@ const defaultBuildRecorderParams: BuildRecorderParams = {
     idleTag: "CONTROL_IDLE",
 }
 
-const buildRecorder = (params: Partial<BuildRecorderParams>) => {
-    const completeParams: BuildRecorderParams = {
-        ...defaultBuildRecorderParams,
+const buildClient = (params: Partial<BuildClientParams>) => {
+    const completeParams: BuildClientParams = {
+        ...defaultBuildClientParams,
         ...params,
     };
-    return new HiccupRecorder(
+    return new HiccupClient(
         hiccupWorker(), 
         completeParams.enableIdleController && controlIdleWorker(), 
         completeParams.tag,
@@ -40,10 +40,10 @@ const buildRecorder = (params: Partial<BuildRecorderParams>) => {
     );
 };
 
-const monitor = (params: Partial<BuildRecorderParams> = defaultBuildRecorderParams) => {
-    const recorder = buildRecorder(params);
-    recorder.start();
-    return recorder;
+const monitor = (params: Partial<BuildClientParams> = defaultBuildClientParams) => {
+    const client = buildClient(params);
+    client.start();
+    return client;
 }
 
 export default monitor;
