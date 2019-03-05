@@ -18,4 +18,5 @@ export default (fn: () => void, timeoutInMs: number) => {
             }
         }
     }
+    loop();
 }
