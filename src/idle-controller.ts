@@ -6,7 +6,6 @@ import {
 } from "./api";
 import schedule from './scheduler';
 
-
 type Logger = (content: string) => void;
 
 let resolutionMilliSec: number = 1; // value not used - makes TypeScript compiler happy
