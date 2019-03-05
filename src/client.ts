@@ -39,7 +39,7 @@ export class HiccupClient {
     this.startRecorderLoop();
   }
 
-  getLastHiccupStatistics(): HiccupStatistics {
+  getLastIntervalStatistics(): HiccupStatistics {
     return this.lastHiccupStatistics;
   }
 

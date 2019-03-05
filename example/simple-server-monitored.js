@@ -8,7 +8,7 @@ const monitor = require('../dist').default;
 let hiccupClient;
 
 http.createServer((req, res) => {
-  console.log('Last statistics', hiccupClient.getLastHiccupStatistics())
+  console.log('Last statistics', hiccupClient.getLastIntervalStatistics())
   let buffer = "";
   const loops = Math.ceil(Math.random() * 10000000);
   for (let index = 0; index < loops ; index++) {
