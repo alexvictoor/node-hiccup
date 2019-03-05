@@ -16,7 +16,6 @@ let logger: Logger;
 
 const sendStatistics = (histogram: AbstractHistogram) => {
   if (process.send) { 
-    console.log("send stats", histogram.getTotalCount());
     const stats: HiccupStatisticsEvent = {
       type: 'statistics',
       statistics: {
