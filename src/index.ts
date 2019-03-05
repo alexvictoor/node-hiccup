@@ -4,7 +4,7 @@ import { HiccupClient } from './client';
 const hiccupWorker = () => fork(`${__dirname}/start-worker.js`);
 const controlIdleWorker = () => fork(`${__dirname}/start-idle-controller.js`);
 
-interface BuildClientParams {
+interface Configuration {
     /** sampling resolution in milliseconds (default 100ms) */
     resolutionMs: number,
     /** reporting interval (default 30000m) */
@@ -17,7 +17,7 @@ interface BuildClientParams {
     idleTag: string,
 }
 
-const defaultBuildClientParams: BuildClientParams = {
+const defaultConfiguration: Configuration = {
     resolutionMs: 100,
     reportingIntervalMs: 30000,
     tag: "HICCUP",
@@ -25,23 +25,23 @@ const defaultBuildClientParams: BuildClientParams = {
     idleTag: "CONTROL_IDLE",
 }
 
-const buildClient = (params: Partial<BuildClientParams>) => {
-    const completeParams: BuildClientParams = {
-        ...defaultBuildClientParams,
-        ...params,
+const buildClient = (config: Partial<Configuration>) => {
+    const completeConfig: Configuration = {
+        ...defaultConfiguration,
+        ...config,
     };
     return new HiccupClient(
         hiccupWorker(), 
-        completeParams.enableIdleController && controlIdleWorker(), 
-        completeParams.tag,
-        completeParams.idleTag,
-        completeParams.resolutionMs,
-        completeParams.reportingIntervalMs
+        completeConfig.enableIdleController && controlIdleWorker(), 
+        completeConfig.tag,
+        completeConfig.idleTag,
+        completeConfig.resolutionMs,
+        completeConfig.reportingIntervalMs
     );
 };
 
-const monitor = (params: Partial<BuildClientParams> = defaultBuildClientParams) => {
-    const client = buildClient(params);
+const monitor = (config: Partial<Configuration> = defaultConfiguration) => {
+    const client = buildClient(config);
     client.start();
     return client;
 }
