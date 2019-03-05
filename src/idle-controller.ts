@@ -4,6 +4,8 @@ import {
   StartHiccupRecorderEvent,
   StopHiccupRecorderEvent
 } from "./api";
+import schedule from './scheduler';
+
 
 type Logger = (content: string) => void;
 
@@ -13,6 +15,8 @@ let controlIdleTimer: any;
 const controlIdleRecorder = new Recorder();
 let controlIdleHistogram = controlIdleRecorder.getIntervalHistogram();
 let logger: Logger;
+
+let running = false;
 
 let shortestObservedDeltaTimeMilliSec = Number.MAX_SAFE_INTEGER;
 const recordIdleTime = (deltaTimeMilliSec: number) => {
@@ -38,17 +42,22 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
     writer.outputIntervalHistogram(controlIdleHistogram, undefined, undefined, 1);
   }, event.reportingIntervalMs);
   
+  running = true;
   let timeBeforeMeasurement = process.hrtime();
-  controlIdleTimer = setInterval(() => {
+  const recordLoop = () => {
     const delta = process.hrtime(timeBeforeMeasurement);
     const deltaTimeMilliSec = Math.floor(delta[0] * 1e3 + delta[1] / 1e6);
     recordIdleTime(deltaTimeMilliSec);
     timeBeforeMeasurement = process.hrtime();
-  }, event.resolutionMs);
+    if (running) {
+      schedule(recordLoop, event.resolutionMs)
+    }
+  }
+  schedule(recordLoop, event.resolutionMs)
 };
 
 const handleStop = (event: StopHiccupRecorderEvent) => {
-  clearInterval(controlIdleTimer);
+  running = false;
   clearInterval(reporter);
 };
 
