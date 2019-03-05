@@ -41,10 +41,10 @@ That's all folks!
 
 The hiccup object returned by the *monitor()* method call provides 2 methods:
 - *stop()* stop the instrumentation of the event loop, if you want to implement a gracefull shutdown.
-- *getLastIntervalStatistics()* provides useful stats on the event loop latency from latest measures (i.e. an object that looks like that { count: 4200, mean: 123, p90: 200, p99: 250, p99_9: 290, max: 297 })  
+- *getLastIntervalStatistics()* provides useful live statistics on the event loop latency from latest measures (i.e. an object that looks like that { count: 4200, mean: 123, p90: 200, p99: 250, p99_9: 290, max: 297 })  
 
-
-After a few seconds you will also see some logs with base64 strings as below:
+There are some shortcomings with live statistics. The main one is that you will not be able to retrieve these statistics when you need them the most, when your application event loop is very busy or even completely stucked.  
+These shortcomings can be avoided by using logs. node-hiccup worker process generates logs containing all hiccup measures serialized in base64 strings:
 ```
 #node-hiccup v1.0
 #Timestamp and interval length are in seconds
