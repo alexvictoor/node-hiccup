@@ -1,3 +1,4 @@
+import { ChildProcess } from "child_process";
 import {
     RecordHiccupEvent,
     StartHiccupRecorderEvent,
@@ -5,12 +6,13 @@ import {
     HiccupStatistics,
     EventFromWorker
   } from "./api";
-import { ChildProcess } from "child_process";
+  import schedule from './scheduler';
   
   
 export class HiccupClient {
   private recorderLoop: any;
   private lastHiccupStatistics: HiccupStatistics;
+  private running: boolean;
 
   constructor(
     private worker: ChildProcess,
@@ -28,6 +30,7 @@ export class HiccupClient {
       p99_9: NaN,
       max: NaN,
     }
+    this.running = false;
   }
 
   start() {
@@ -65,16 +68,22 @@ export class HiccupClient {
   }
 
   private startRecorderLoop() {
-    let timeBeforeMeasurement = process.hrtime();
-    this.recorderLoop = setInterval(() => {
-      const delta = process.hrtime(timeBeforeMeasurement);
+    let timeBeforeMeasure = process.hrtime();
+    this.running = true;
+    const loop = () => {
+      const delta = process.hrtime(timeBeforeMeasure);
       const recordEvent: RecordHiccupEvent = {
         type: "record",
         deltaTimeMilliSec: Math.floor(delta[0] * 1e3 + delta[1] / 1e6)
       };
       this.worker.send(recordEvent);
-      timeBeforeMeasurement = process.hrtime();
-    }, this.resolutionMs);
+      timeBeforeMeasure = process.hrtime();
+      if (this.running) {
+        schedule(loop, this.resolutionMs);
+      }
+    };
+    schedule(loop, this.resolutionMs);
+
 
     this.worker.on('message', (event: EventFromWorker) => {
       if (event.type === "statistics") {
@@ -84,7 +93,7 @@ export class HiccupClient {
   }
   
   stop() {
-    clearInterval(this.recorderLoop);
+    this.running = false;
     const stopEvent: StopHiccupRecorderEvent = {
       type: "stop"
     };
