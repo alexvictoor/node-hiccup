@@ -6,7 +6,7 @@ node-hiccup is strongly inspired by [jHiccup](https://github.com/giltene/jHiccup
 *Note: node-hiccup measures are in milli seconds when displayed in the log analyzer UI*
 
 ## Under the cover 
-Just like jHiccup, node-hiccup runs a loop and keeps track of the delay between two turns. If the delay is bigger than usual, the system, the JavaScript runtime, might have freeze. All the delay are stored in an histogram which is serialized at fixed interval in a log, leveraging on [HdrHistogram](https://github.com/HdrHistogram/HdrHistogramJS). Since HdrHistogram operations might increase the load of your application, all the costly treatments are done by a forked NodeJS process. Hence the overhead on the event loop running your code should be as low as possible. 
+Just like jHiccup, node-hiccup runs a loop and keeps track of the delay between two turns. If the delay is bigger than usual, the system, the JavaScript runtime, might have freezed. All the delay are stored in an histogram which is serialized at fixed interval in a log, leveraging on [HdrHistogram](https://github.com/HdrHistogram/HdrHistogramJS). Since HdrHistogram operations might increase the load of your application, all the costly treatments are done by a forked NodeJS process. Hence the overhead on the event loop running your code should be as low as possible. 
 
 ## Usage
 
@@ -32,11 +32,19 @@ Then you just need 2 lines of code in the bootstrap of your application:
 ```
   import monitor from 'node-hiccup';
 
-  monitor();
+  const hiccup = monitor();
+  ...
+
 ```
 
-That's all folks!
-After a few seconds you will see some logs with base64 strings as below:
+That's all folks!  
+
+The hiccup object returned by the *monitor()* method call provides 2 methods:
+- *stop()* stop the instrumentation of the event loop, if you want to implement a gracefull shutdown.
+- *getLastHiccupStatistics()* provides useful stats on the event loop latency from latest measures (i.e. an object that looks like that { count: 4200, mean: 123, p90: 200, p99: 250, p99_9: 290, max: 297 })  
+
+
+After a few seconds you will also see some logs with base64 strings as below:
 ```
 #node-hiccup v1.0
 #Timestamp and interval length are in seconds
@@ -47,16 +55,7 @@ Tag=HICCUP,1546001922.480,30.001,6.078,HISTFAAAAU54nDWSwUrDQBCGN/9uCCGGEoqUUkMpp
 Tag=HICCUP,1546001922.478,30.001,6.162,HISTFAAAAVB4...
 ```
 
-The purpose of those logs is to allow a deep analysis of what is happening in your application using [HdrHistogram log analyzer](https://hdrhistogram.github.io/HdrHistogramJSDemo/logparser.html). 
-
-Logs are fine to study afterwards the behavior of an application. You can also get near realtime metrics within your application:
-```
-const hiccup = monitor();
-
-const stats = hiccup.getLastHiccupStatistics();
-// { count: 4200, mean: 123, p90: 200, p99: 250, p99_9: 290, max: 297 }
-
-```
+The purpose of those logs is to allow a deep analysis afterwards of what is happening in your application using [HdrHistogram log analyzer](https://hdrhistogram.github.io/HdrHistogramJSDemo/logparser.html). 
 
 
 ## Advanced usage
