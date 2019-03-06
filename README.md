@@ -1,12 +1,13 @@
 # node-hiccup
-NodeJS monitoring tool inspired by jHiccup from the Java landscape
+NodeJS monitoring tool inspired by [jHiccup](https://github.com/giltene/jHiccup) from the Java landscape
 
-Struggling with performance issues on your NodeJS application? node-hiccup might be handy!
-node-hiccup is strongly inspired by [jHiccup](https://github.com/giltene/jHiccup) from the Java landscape. The goal of node-hiccup is to measure NodeJS event loop latency issues. Just like JHiccup, it generates logs files that can be used to generate graphs with the [HdrHistogram log analyzer](https://hdrhistogram.github.io/HdrHistogramJSDemo/logparser.html) 
+Struggling with performance issues on your NodeJS application? node-hiccup might be handy!  
+node-hiccup is a non-intrusive instrumentation tool that logs and reports hiccups of a NodeJS application. Hiccups may be caused by gc issues, event loop latency issues or because the OS is stall...  
+Just like JHiccup, it generates logs files that can be used to generate graphs with the [HdrHistogram log analyzer](https://hdrhistogram.github.io/HdrHistogramJSDemo/logparser.html) 
 *Note: node-hiccup measures are in milli seconds when displayed in the log analyzer UI*
 
 ## Under the cover 
-Just like jHiccup, node-hiccup runs a loop and keeps track of the delay between two turns. If the delay is bigger than usual, the system, the JavaScript runtime, might have freezed. All the delay are stored in an histogram which is serialized at fixed interval in a log, leveraging on [HdrHistogram](https://github.com/HdrHistogram/HdrHistogramJS). Since HdrHistogram operations might increase the load of your application, all the costly treatments are done by a forked NodeJS process. Hence the overhead on the event loop running your code should be as low as possible. 
+Like jHiccup, node-hiccup runs a loop and keeps track of the delay between two turns. If the delay is bigger than usual, the system, the JavaScript runtime, might have freezed. All the delay are stored in an histogram which is serialized at fixed interval in a log, leveraging on [HdrHistogram](https://github.com/HdrHistogram/HdrHistogramJS). Since HdrHistogram operations might increase the load of your application, all the costly treatments are done by a forked NodeJS process. Hence the overhead on the event loop running your code should be as low as possible. 
 
 ## Usage
 
