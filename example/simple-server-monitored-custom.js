@@ -8,18 +8,18 @@ const monitor = require('../dist').default;
 let hiccupClient;
 
 http.createServer((req, res) => {
-  console.log('Last statistics', hiccupClient.getLastIntervalStatistics())
   let buffer = "";
-  const loops = Math.ceil(Math.random() * 10000000);
-  for (let index = 0; index < loops ; index++) {
-      buffer += `${req.method} Doing crazy stuff with the event loop ${index}`;
+  const delay = Math.ceil(Math.random() * 100);
+  const begin = Date.now();
+  while (Date.now() - begin < delay) { // blocking the event loop...
+    buffer += delay;
   }
-  res.end('Hello world! ' + new Date() + ' ' + buffer.length);
+  res.end(JSON.stringify(hiccupClient.getLastIntervalStatistics(), null, 2));
 }).listen(8080, () => {
   console.log('Server started on port 8080');
   hiccupClient = monitor({
     enableIdleController: true,
-    reportingIntervalMs: 5000,
+    reportingIntervalMs: 10000,
     tag: 'MAIN_EVENT_LOOP',
     idleTag: 'SYSTEM_IDLE',
   });
