@@ -35,9 +35,9 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
   const writer = new HistogramLogWriter(content => logger(content));
   writer.outputLogFormatVersion();
   writer.outputComment("node-hiccup v1.0");
+  writer.outputComment("To visualize those data go to https://hdrhistogram.github.io/HdrHistogramJSDemo/logparser.html");
   writer.outputComment("Timestamp and interval length are in seconds");
-  writer.outputComment("Hiccup measures are in milliseconds");
-  writer.outputComment("Hiccup max are in milliseconds");
+  writer.outputComment("Hiccup measures & interval max are in milliseconds");
   //writer.outputLegend();
   logger(`"Tag","StartTimestamp","Interval_Length","Interval_Max","Interval_Compressed_Histogram"`);
   recorder.reset();
