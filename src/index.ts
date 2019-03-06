@@ -18,8 +18,8 @@ interface Configuration {
 }
 
 const defaultConfiguration: Configuration = {
-    resolutionMs: 100,
-    reportingIntervalMs: 30000,
+    resolutionMs: 1,
+    reportingIntervalMs: 5000,
     tag: "HICCUP",
     enableIdleController: false,
     idleTag: "CONTROL_IDLE",

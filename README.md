@@ -64,12 +64,13 @@ In the above example, node-hiccup was started with the monitor() function, with 
 
   import monitor from 'node-hiccup';
   const monitor = monitor({
-    resolutionMs: 100,            // sampling resolution in milliseconds
-                                  // here each 100ms a timer checks that 100ms,
-                                  // and only 100ms, have actually elapsed
+    resolutionMs: 1,              // sampling resolution in milliseconds
+                                  // here each millisecond a timer checks that 
+                                  // one millisecond and only one, has actually
+                                  // elapsed
     
-    reportingIntervalMs: 30000,   // reporting interval
-                                  // here each 30s a base64 encoded histogram
+    reportingIntervalMs: 5000,    // reporting interval
+                                  // here each 5s a base64 encoded histogram
                                   // of hiccup latencies is written in the
                                   // standard output
     
