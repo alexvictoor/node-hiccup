@@ -1,6 +1,8 @@
 // Hello world HTTP
 const http = require('http');
 
+require('./lib');
+
 http.createServer((req, res) => {
   let buffer = "";
   const delay = Math.ceil(Math.random() * 100);

@@ -1,8 +1,13 @@
 #!/usr/bin/env node
-import { readFileSync } from 'fs';
 import monitor from './index';
 
-console.log(`Starting to instrument with node-hiccup script ${process.argv[2]}`);
-const script = readFileSync(process.argv[2],'utf8');
+const scriptParam = process.argv[2];
+console.log(`Starting to instrument with node-hiccup script ${scriptParam}`);
+try {
+    require.resolve('./' + scriptParam);
+} catch (err) {
+    console.error(`Could not find javascript module ${scriptParam}`)
+    throw err;
+}
 monitor();
-eval(script);
+require('./' + scriptParam);
