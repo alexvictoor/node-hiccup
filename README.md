@@ -14,7 +14,7 @@ Like jHiccup, node-hiccup runs a loop and keeps track of the delay between two t
 You can use node-hiccup without touching any line of code. This can be done leveraging on npx. The only thing you need to do is to replace 'node' by 'npx node-hiccup' in the command line used to bootstrap your application:
 
 ```
-  npx node-hiccup /ABSOLUTE_PATH/server.js  // assuming that server.js is the bootstrap script for your app
+  npx node-hiccup server.js  // assuming that server.js is the bootstrap script for your app
 
 ```
 
