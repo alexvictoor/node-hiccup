@@ -7,6 +7,8 @@ node-hiccup is strongly inspired by [jHiccup](https://github.com/giltene/jHiccup
 Just like JHiccup, it generates logs files that can be used to generate graphs with the [HdrHistogram log analyzer](https://hdrhistogram.github.io/HdrHistogramJSDemo/logparser.html)  
 *Note: node-hiccup measures are in milli seconds when displayed in the log analyzer UI*
 
+![screenshot](histogram.png)
+
 ## Under the cover 
 Like jHiccup, node-hiccup runs a loop and keeps track of the delay between two turns. If the delay is bigger than usual, the system, the JavaScript runtime, might have freezed. All the delay are stored in an histogram which is serialized at fixed interval in a log, leveraging on [HdrHistogram](https://github.com/HdrHistogram/HdrHistogramJS). Since HdrHistogram operations might increase the load of your application, all the costly treatments are done by a forked NodeJS process. Hence the overhead on the event loop running your code should be as low as possible. 
 
