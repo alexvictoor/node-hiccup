@@ -1,32 +1,41 @@
 # node-hiccup
-NodeJS monitoring tool inspired by [jHiccup](https://github.com/giltene/jHiccup) from the Java landscape
 
 Struggling with performance issues on your NodeJS application? node-hiccup might be handy!  
+
 node-hiccup is a non-intrusive instrumentation tool that logs and reports hiccups of a NodeJS application. Hiccups may be caused by gc issues, event loop latency issues or because the OS is stall...  
-Just like JHiccup, it generates logs files that can be used to generate graphs with the [HdrHistogram log analyzer](https://hdrhistogram.github.io/HdrHistogramJSDemo/logparser.html) 
+node-hiccup is strongly inspired by [jHiccup](https://github.com/giltene/jHiccup) from the Java landscape.  
+Just like JHiccup, it generates logs files that can be used to generate graphs with the [HdrHistogram log analyzer](https://hdrhistogram.github.io/HdrHistogramJSDemo/logparser.html)  
 *Note: node-hiccup measures are in milli seconds when displayed in the log analyzer UI*
 
 ## Under the cover 
 Like jHiccup, node-hiccup runs a loop and keeps track of the delay between two turns. If the delay is bigger than usual, the system, the JavaScript runtime, might have freezed. All the delay are stored in an histogram which is serialized at fixed interval in a log, leveraging on [HdrHistogram](https://github.com/HdrHistogram/HdrHistogramJS). Since HdrHistogram operations might increase the load of your application, all the costly treatments are done by a forked NodeJS process. Hence the overhead on the event loop running your code should be as low as possible. 
 
-## Usage
+## Getting started (2 minutes version)
 
-You can use node-hiccup without touching any line of code. This can be done leveraging on npx. The only thing you need to do is to replace 'node' by 'npx node-hiccup' in the command line used to bootstrap your application:
+You can use node-hiccup without touching any line of code. This can be done leveraging on npx.  
+The only thing you need to do is to replace 'node' by 'npx node-hiccup'.  
+The command line used to bootstrap your application might then looks like:
 
 ```
-  npx node-hiccup server.js  // assuming that server.js is the bootstrap script for your app
-
+  npx node-hiccup server.js  // assuming that server.js 
+                             //is the bootstrap script for your app
 ```
 
-...and that's it! Your app is now instrumented with node-hiccup. After a few seconds you will see some logs coming (hold tight, more on that below).
+...and that's it!  
+Your app is now instrumented with node-hiccup.  
+After a few seconds you will see some logs coming in the console (hold tight, more on that below).
+
+## Getting started (5 minutes version)
+
 In some cases you may need to have more control on how your application is launched. 
 If you are in this situation, you need to include node-hiccup in your project:
 ```
+  // npm
   npm i -S node-hiccup
-```
-or if you prefer yarn:
-```
-  yarn install node-hiccup
+  
+  // yarn
+  yarn add node-hiccup
+
 ```
 
 Then you just need 2 lines of code in the bootstrap of your application:
@@ -34,14 +43,13 @@ Then you just need 2 lines of code in the bootstrap of your application:
   import monitor from 'node-hiccup';
 
   const hiccup = monitor();
-  ...
-
 ```
 
-That's all folks!  
+That's all folks for the instrumentation part!  
+Now the question is how do we get some metrics on the event loop?  
 
 The hiccup object returned by the *monitor()* method call provides 2 methods:
-- *stop()* stop the instrumentation of the event loop, if you want to implement a gracefull shutdown.
+- *stop()* stop the instrumentation of the event loop, useful if you want to implement a gracefull shutdown.
 - *getLastIntervalStatistics()* provides useful live statistics on the event loop latency from latest measures (i.e. an object that looks like that { count: 4200, mean: 123, p90: 200, p99: 250, p99_9: 290, max: 297 })  
 
 There are some shortcomings with live statistics. The main one is that you will not be able to retrieve these statistics when you need them the most, when your application event loop is very busy or even completely stucked.  
