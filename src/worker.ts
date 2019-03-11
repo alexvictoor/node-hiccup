@@ -39,7 +39,7 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
   writer.outputComment("Timestamp and interval length are in seconds");
   writer.outputComment("Hiccup measures & interval max are in milliseconds");
   //writer.outputLegend();
-  logger(`"#Tag","StartTimestamp","Interval_Length","Interval_Max","Interval_Compressed_Histogram"`);
+  logger(`#"Tag","StartTimestamp","Interval_Length","Interval_Max","Interval_Compressed_Histogram"`);
   recorder.reset();
   resolutionMilliSec = event.resolutionMs;
   let histogram = recorder.getIntervalHistogram();
