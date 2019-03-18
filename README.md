@@ -92,6 +92,9 @@ In the above example, node-hiccup was started with the monitor() function, with 
     
     idleTag: "CONTROL_IDLE",      // tag used in the logs for idle workload measures
                                   // (used only when idleController=true)
+
+    correctForCoordinatedOmissions: true, // correct for coordinated omissions 
+                                          // situations
   });
 
 

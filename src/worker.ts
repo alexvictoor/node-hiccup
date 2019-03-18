@@ -13,6 +13,7 @@ let resolutionMilliSec: number = 1; // value not used - makes TypeScript compile
 let reporter: any;
 const recorder = new Recorder();
 let logger: Logger;
+let recordLatency = recorder.recordValueWithExpectedInterval.bind(recorder);
 
 const sendStatistics = (histogram: AbstractHistogram) => {
   if (process.send) { 
@@ -41,6 +42,12 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
   //writer.outputLegend();
   logger(`#"Tag","StartTimestamp","Interval_Length","Interval_Max","Interval_Compressed_Histogram"`);
   recorder.reset();
+
+  recordLatency = 
+    event.correctForCoordinatedOmissions 
+    ? recorder.recordValueWithExpectedInterval.bind(recorder) 
+    : recorder.recordValue.bind(recorder);
+
   resolutionMilliSec = event.resolutionMs;
   let histogram = recorder.getIntervalHistogram();
   reporter = setInterval(() => {
@@ -59,7 +66,7 @@ const handleRecord = ({ deltaTimeMilliSec }: RecordHiccupEvent) => {
   const hiccupTimeMilliSec = Math.round(
     deltaTimeMilliSec - shortestObservedDeltaTimeMilliSec
   );
-  recorder.recordValueWithExpectedInterval(
+  recordLatency(
     hiccupTimeMilliSec,
     resolutionMilliSec
   );

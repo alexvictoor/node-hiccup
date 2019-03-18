@@ -15,6 +15,8 @@ interface Configuration {
     enableIdleController: boolean,
     /** tag used in the logs for idle workload measures (default "CONTROL_IDLE") */
     idleTag: string,
+    /** correct for coordinated omissions situations (default true) */
+    correctForCoordinatedOmissions: boolean,
 }
 
 const defaultConfiguration: Configuration = {
@@ -23,6 +25,7 @@ const defaultConfiguration: Configuration = {
     tag: "HICCUP",
     enableIdleController: false,
     idleTag: "CONTROL_IDLE",
+    correctForCoordinatedOmissions: true,
 }
 
 const buildClient = (config: Partial<Configuration>) => {
@@ -36,7 +39,8 @@ const buildClient = (config: Partial<Configuration>) => {
         completeConfig.tag,
         completeConfig.idleTag,
         completeConfig.resolutionMs,
-        completeConfig.reportingIntervalMs
+        completeConfig.reportingIntervalMs,
+        completeConfig.correctForCoordinatedOmissions,
     );
 };
 

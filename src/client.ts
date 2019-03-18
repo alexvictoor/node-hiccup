@@ -21,6 +21,7 @@ export class HiccupClient {
     private idleTag = "CONTROL_IDLE",
     private resolutionMs = 100,
     private reportingIntervalMs = 30000,
+    private correctForCoordinatedOmissions = true,
   ) {
     this.lastHiccupStatistics = {
       count: NaN,
@@ -48,7 +49,8 @@ export class HiccupClient {
       type: "start",
       resolutionMs: this.resolutionMs,
       reportingIntervalMs: this.reportingIntervalMs,
-      tag: this.tag
+      tag: this.tag,
+      correctForCoordinatedOmissions: this.correctForCoordinatedOmissions
     };
     this.worker.send(startEvent);
   }
@@ -62,7 +64,8 @@ export class HiccupClient {
       type: "start",
       resolutionMs: this.resolutionMs,
       reportingIntervalMs: this.reportingIntervalMs,
-      tag: this.idleTag
+      tag: this.idleTag,
+     correctForCoordinatedOmissions: this.correctForCoordinatedOmissions,
     };
     this.controlIdleWorker.send(startEvent);
   }
