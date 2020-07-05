@@ -1,6 +1,6 @@
 {
   "name": "node-hiccup",
-  "version": "1.0.1",
+  "version": "2.0.0.beta.0",
   "description": "JavaScript version of jHiccup for NodeJS",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -19,12 +19,10 @@
   "license": "BSD",
   "devDependencies": {
     "@types/node": "7.0.0",
-    "prettier": "^1.6.1",
-    "typescript": "^3.1.0"
+    "prettier": "^1.6.1"
   },
   "dependencies": {
-    "base64-js": "^1.2.0",
-    "hdr-histogram-js": "^1.0.0",
-    "pako": "^1.0.3"
+    "hdr-histogram-js": "^1.2.0",
+    "typescript": "^3.9.6"
   }
 }
