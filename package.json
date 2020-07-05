@@ -1,6 +1,6 @@
 {
   "name": "node-hiccup",
-  "version": "2.0.1-beta",
+  "version": "2.0.2-beta.0",
   "description": "JavaScript version of jHiccup for NodeJS",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
