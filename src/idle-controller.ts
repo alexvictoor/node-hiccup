@@ -4,7 +4,7 @@ import {
   StartHiccupRecorderEvent,
   StopHiccupRecorderEvent
 } from "./api";
-import schedule from './scheduler';
+import schedule from "./scheduler";
 
 type Logger = (content: string) => void;
 
@@ -36,11 +36,18 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
   controlIdleRecorder.reset();
   resolutionMilliSec = event.resolutionMs * 1000;
   reporter = setInterval(() => {
-    controlIdleHistogram = controlIdleRecorder.getIntervalHistogram(controlIdleHistogram);
-    controlIdleHistogram.tag = 'CONTROL_IDLE';
-    writer.outputIntervalHistogram(controlIdleHistogram, undefined, undefined, 1);
+    controlIdleHistogram = controlIdleRecorder.getIntervalHistogram(
+      controlIdleHistogram
+    );
+    controlIdleHistogram.tag = "CONTROL_IDLE";
+    writer.outputIntervalHistogram(
+      controlIdleHistogram,
+      undefined,
+      undefined,
+      1
+    );
   }, event.reportingIntervalMs);
-  
+
   running = true;
   let timeBeforeMeasurement = process.hrtime();
   const recordLoop = () => {
@@ -49,10 +56,10 @@ const handleStart = (event: StartHiccupRecorderEvent) => {
     recordIdleTime(deltaTimeMilliSec);
     timeBeforeMeasurement = process.hrtime();
     if (running) {
-      schedule(recordLoop, event.resolutionMs)
+      schedule(recordLoop, event.resolutionMs);
     }
-  }
-  schedule(recordLoop, event.resolutionMs)
+  };
+  schedule(recordLoop, event.resolutionMs);
 };
 
 const handleStop = (event: StopHiccupRecorderEvent) => {
@@ -60,21 +67,23 @@ const handleStop = (event: StopHiccupRecorderEvent) => {
   clearInterval(reporter);
 };
 
-export function configureAndStartIdleController(customLogger: (content: string) => void = console.log) {
-    logger = customLogger;
-    process.on('message', (event: EventFromClient) => {
-      switch (event.type) {
-        case "start":
-          handleStart(event);
-          break;
-        case "record":
-          // event ignored by the idle controller
-          break;
-        case "stop":
-          handleStop(event);
-          break;
-        default:
-          const error: never = event;
-      }
-    });
+export function configureAndStartIdleController(
+  customLogger: (content: string) => void = console.log
+) {
+  logger = customLogger;
+  process.on("message", (event: EventFromClient) => {
+    switch (event.type) {
+      case "start":
+        handleStart(event);
+        break;
+      case "record":
+        // event ignored by the idle controller
+        break;
+      case "stop":
+        handleStop(event);
+        break;
+      default:
+        const error: never = event;
+    }
+  });
 }

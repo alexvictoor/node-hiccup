@@ -1,14 +1,13 @@
 import { ChildProcess } from "child_process";
 import {
-    RecordHiccupEvent,
-    StartHiccupRecorderEvent,
-    StopHiccupRecorderEvent,
-    HiccupStatistics,
-    EventFromWorker
-  } from "./api";
-  import schedule from './scheduler';
-  
-  
+  RecordHiccupEvent,
+  StartHiccupRecorderEvent,
+  StopHiccupRecorderEvent,
+  HiccupStatistics,
+  EventFromWorker
+} from "./api";
+import schedule from "./scheduler";
+
 export class HiccupClient {
   private recorderLoop: any;
   private lastHiccupStatistics: HiccupStatistics;
@@ -21,7 +20,7 @@ export class HiccupClient {
     private idleTag = "CONTROL_IDLE",
     private resolutionMs = 100,
     private reportingIntervalMs = 30000,
-    private correctForCoordinatedOmissions = true,
+    private correctForCoordinatedOmissions = true
   ) {
     this.lastHiccupStatistics = {
       count: NaN,
@@ -29,8 +28,8 @@ export class HiccupClient {
       p90: NaN,
       p99: NaN,
       p99_9: NaN,
-      max: NaN,
-    }
+      max: NaN
+    };
     this.running = false;
   }
 
@@ -65,7 +64,7 @@ export class HiccupClient {
       resolutionMs: this.resolutionMs,
       reportingIntervalMs: this.reportingIntervalMs,
       tag: this.idleTag,
-     correctForCoordinatedOmissions: this.correctForCoordinatedOmissions,
+      correctForCoordinatedOmissions: this.correctForCoordinatedOmissions
     };
     this.controlIdleWorker.send(startEvent);
   }
@@ -87,14 +86,13 @@ export class HiccupClient {
     };
     schedule(loop, this.resolutionMs);
 
-
-    this.worker.on('message', (event: EventFromWorker) => {
+    this.worker.on("message", (event: EventFromWorker) => {
       if (event.type === "statistics") {
-          this.lastHiccupStatistics = event.statistics;
+        this.lastHiccupStatistics = event.statistics;
       }
     });
   }
-  
+
   stop() {
     this.running = false;
     const stopEvent: StopHiccupRecorderEvent = {
@@ -106,4 +104,3 @@ export class HiccupClient {
     }
   }
 }
-  

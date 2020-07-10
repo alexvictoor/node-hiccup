@@ -22,7 +22,7 @@
     "prettier": "^1.6.1"
   },
   "dependencies": {
-    "hdr-histogram-js": "^1.2.0",
+    "hdr-histogram-js": "2.0.0-beta4",
     "typescript": "^3.9.6"
   }
 }

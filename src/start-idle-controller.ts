@@ -1,3 +1,3 @@
-import { configureAndStartIdleController } from './idle-controller';
+import { configureAndStartIdleController } from "./idle-controller";
 
 configureAndStartIdleController();

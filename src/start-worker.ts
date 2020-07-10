@@ -1,3 +1,4 @@
-import { configureAndStartWorker } from './worker';
+import { configureAndStartWorker } from "./worker";
+import { initWebAssembly } from "hdr-histogram-js";
 
-configureAndStartWorker();
+initWebAssembly().then(() => configureAndStartWorker());
